@@ -188,11 +188,12 @@ public class Main {
         System.out.println("4  - to show a record by index of it");
         System.out.println("5  - to check existence of record by key of it");
         System.out.println("6  - to show a record by key of it");
-        System.out.println("7  - to show some records by gap (from .. to ..)");
-        System.out.println("8  - to show count of records");
-        System.out.println("9  - to add new record");
-        System.out.println("10 - to update a value of record by index of it");
-        System.out.println("11 - to update a value of record by key of it");
+        System.out.println("7  - to check existence of record by index of it");
+        System.out.println("8  - to show some records by gap (from .. to ..)");
+        System.out.println("9  - to show count of records");
+        System.out.println("10  - to add new record");
+        System.out.println("11 - to update a value of record by index of it");
+        System.out.println("12 - to update a value of record by key of it");
     }
 
     static int parseToInt(String num) throws NumberFormatException{
