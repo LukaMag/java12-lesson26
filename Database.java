@@ -1,22 +1,21 @@
 package CLASSWORK26;
 
 import java.util.MissingFormatWidthException;
-import java.util.Scanner;
 
 public class Database implements Connectable{
-    private String key;
+    private int key;
     private String value;
 
-    public Database(String key, String value) {
+    public Database(int key, String value) {
         this.key = key;
         this.value = value;
     }
 
-    public String getKey() {
+    public int getKey() {
         return key;
     }
 
-    public void setKey(String key) {
+    public void setKey(int key) {
         this.key = key;
     }
 
@@ -28,25 +27,16 @@ public class Database implements Connectable{
         this.value = value;
     }
 
-    @Override
-    public boolean checkLine(Database[] records, int index)throws AbsentException {
-        boolean isExist = false;
-        for(int i = 0; i < records.length ;i++){
-            if(i == index + 1){
-                isExist = true;
-            }else {
-                throw new AbsentException("There is none exist record with this index");
-            }
-        }
-        return isExist;
-    }
+
 
     @Override
-    public boolean openCon(boolean connection)throws MissingFormatWidthException {
+    public  boolean openCon(boolean connection)throws MissingFormatWidthException {
         if(connection){
             throw new MissingFormatWidthException("Connection is already opened");
         }else {
+            System.out.println("Connection is successfully opened");
             connection = true;
+
         }
         return connection;
     }
@@ -54,6 +44,7 @@ public class Database implements Connectable{
     @Override
     public boolean closeCon(boolean connection)throws MissingFormatWidthException {
         if(connection){
+            System.out.println("Connection is successfully closed");
             connection = false;
         }else {
             throw new MissingFormatWidthException("Connection is already closed");
@@ -62,97 +53,100 @@ public class Database implements Connectable{
     }
 
     @Override
-    public boolean checkCon(boolean connection) {
-        return false;
-    }
-
-    @Override
-    public void printLine(Database[] records,int index)throws AbsentException {
-        for(int i = 0; i < records.length;i++){
-            if(index + 1 == i){
-                System.out.println(records[i]);
-            }else{
-                throw new AbsentException("There is none exist record with this index");
-            }
+    public void checkCon(boolean connection) {
+        if(connection){
+            System.out.println("Connection is open");
+        }else{
+            System.out.println("Connection is closed");
         }
     }
 
-
-
     @Override
-    public void printLine(Database[] records,String key)throws AbsentException {
-        for(int i = 0; i < records.length;i++){
-            if(records[i].getKey().equals(key)){
-                System.out.println(records[i]);
-            }else{
-                throw new AbsentException("There is none exist record with this key");
+    public void printLine(Database[] records, int index) throws AbsentException {
+        if (index > records.length || index < 1) {
+                throw new AbsentException("There is none record with this index");
+        }else{
+            for (int i = 1; i < records.length; i++) {
+                if (index - 1 == i) {
+                    System.out.println(records[i]);
+                }
             }
         }
     }
 
     @Override
-    public boolean checkLine(Database[] records, String key)throws AbsentException {
+    public void printLineByKey(Database[] records,int key) throws AbsentException {
+        for (Database d:
+             records) {
+            System.out.println(d);
+            if(d.key == key){
+                System.out.println(d);
+            }else{
+                throw new AbsentException("There is none record with this key");
+            }
+        }
+//        for(int i = 0; i < records.length; i++){
+//            System.out.println(records[i].getKey());
+//            if(records[i].getKey() == key){
+//                System.out.println(records[i]);
+//            }else{
+//                throw new AbsentException("There is none record with this key");
+//            }
+//        }
+    }
+
+    @Override
+    public boolean checkLine(Database[] records, int index) throws AbsentException {
         boolean isExist = false;
-        for(int i = 0; i < records.length ;i++){
-            if(records[i].getKey().equals(key)){
-                isExist = true;
-            }else {
-                throw new AbsentException("There is none exist record with this key");
+        if (index > records.length || index < 1) {
+            throw new AbsentException("There is none record with this index");
+        }else{
+            for (int i = 1; i < records.length; i++) {
+                if (index - 1 == i) {
+                    System.out.println("Record is " + records[i]);
+                    isExist = true;
+                }
             }
         }
         return isExist;
     }
 
     @Override
-    public void printLines(Database[] records, int firstRecord, int lastRecord)throws AbsentException {
-        if(firstRecord > records.length || lastRecord > records.length || firstRecord < 0 || lastRecord < 0){
-            if(firstRecord > lastRecord){
-                for(int i = firstRecord ;i > lastRecord; i-- ){
-                    System.out.println(records[i]);
-                }
-            }else{
-                for(int i = lastRecord; i <=firstRecord;i++){
-                    System.out.println(records[i]);
+    public boolean checkLineByKey(Database[] records, int key) throws AbsentException {
+        boolean isExist = false;
+            for (int i = 1; i < records.length; i++) {
+                if (key == records[i].key) {
+                    System.out.println("Record is " + records[i]);
+                    isExist = true;
+                }else {
+                    throw new AbsentException("There is none record with this key");
                 }
             }
-        }else{
-            throw new AbsentException("Choose correct numbers of records!!!");
-        }
+        return isExist;
+    }
+
+    @Override
+    public void printLines(Database[] records, int firstRecord, int lastRecord) throws AbsentException {
 
     }
 
     @Override
     public void countOfRecords(Database[] records) {
-        System.out.println("Count of records is " + records.length);
+
     }
 
     @Override
     public Database recordLine(Database[] records) {
-        Scanner sc = new Scanner(System.in);
-        while(true) {
-            System.out.print("Enter the key of record:");
-            String key = sc.nextLine();
-            for (int i = 0; i < records.length; i++) {
-                if (records[i].getKey().equals(key)){
-                    System.out.println("You have to create another key, this one is already exist");
-                    continue;
-                }else{
-                    System.out.print("Enter the value of record:");
-                    String value = sc.nextLine();
-                    Database record = new Database(key,value);
-                    return record;
-                }
-            }
-        }
+        return null;
     }
 
     @Override
-    public Database[] replaceLine(Database[] records, int index) {
+    public Database[] replaceLine(Database[] records, int index) throws AbsentException {
         return new Database[0];
     }
 
     @Override
-    public Database[] replaceLine(Database[] records, String key) {
+    public Database[] replaceLine(Database[] records, String key) throws AbsentException {
         return new Database[0];
     }
 
